@@ -14,7 +14,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class Agreement {
     @Id
-    private AgreementCategory category;
+    private String category;
 
     @Column
     private Integer time;
