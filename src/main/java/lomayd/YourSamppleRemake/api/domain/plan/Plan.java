@@ -17,7 +17,7 @@ public class Plan {
     private String id;
 
     @Column
-    private Carrier carrier;
+    private String carrier;
 
     @Column
     private Integer cost;
