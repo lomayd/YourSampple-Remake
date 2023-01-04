@@ -21,13 +21,13 @@ public class BillService {
         BillResponseDto.BillCalc billCalc = new BillResponseDto.BillCalc();
         if (bill.getAgreementCategory().equals("PHONESALE")) {
             Integer phoneSale = agreementPhoneSaleRepository.findByPhoneId(bill.getPhoneId()).get().getSale();
-            Integer totalInstallment = bill.getPhonePrize() - phoneSale;
+            Integer totalInstallment = phoneRepository.findById(bill.getPhoneId()).get().getPrize() - phoneSale;
             Integer monthInstallment = totalInstallment / bill.getAgreementTime();
             Integer installmentInterest = monthInstallment * 59 / 1000;
             Integer monthPayment = bill.getPlanCost() + monthInstallment + installmentInterest;
             billCalc = BillResponseDto.BillCalc.builder()
                     .phoneId(bill.getPhoneId())
-                    .phonePrize(bill.getPhonePrize())
+                    .phonePrize(phoneRepository.findById(bill.getPhoneId()).get().getPrize())
                     .planCarrier(bill.getPlanCarrier())
                     .planCost(bill.getPlanCost())
                     .agreementCategory(bill.getAgreementCategory())
@@ -41,19 +41,19 @@ public class BillService {
                     .build();
         }
         else if (bill.getAgreementCategory().equals("BILLSALE")){
-            Integer monthInstallment = bill.getPhonePrize() / bill.getAgreementTime();
+            Integer monthInstallment = phoneRepository.findById(bill.getPhoneId()).get().getPrize() / bill.getAgreementTime();
             Integer installmentInterest = monthInstallment * 59 / 1000;
             Integer monthPayment = bill.getPlanCost() / 25 * 100 + monthInstallment + installmentInterest;
             billCalc = BillResponseDto.BillCalc.builder()
                     .phoneId(bill.getPhoneId())
-                    .phonePrize(bill.getPhonePrize())
+                    .phonePrize(phoneRepository.findById(bill.getPhoneId()).get().getPrize())
                     .planCarrier(bill.getPlanCarrier())
                     .planCost(bill.getPlanCost())
                     .agreementCategory(bill.getAgreementCategory())
                     .agreementTime(bill.getAgreementTime())
                     .phoneSale(0)
                     .billSale(bill.getPlanCost() / 25 * 100)
-                    .totalInstallment(bill.getPhonePrize())
+                    .totalInstallment(phoneRepository.findById(bill.getPhoneId()).get().getPrize())
                     .monthInstallment(monthInstallment)
                     .installmentInterest(installmentInterest)
                     .monthPayment(monthPayment)
