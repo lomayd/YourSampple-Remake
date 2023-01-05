@@ -1,10 +1,10 @@
 package lomayd.YourSamppleRemake.api.domain.agreement;
 
+import lomayd.YourSamppleRemake.api.domain.phone.Phone;
+import lomayd.YourSamppleRemake.api.domain.plan.Plan;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Builder
@@ -14,8 +14,14 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class Agreement {
     @Id
-    private String category;
+    private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Phone phone;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Plan plan;
 
     @Column
-    private Integer time;
+    private Integer sale;
 }
