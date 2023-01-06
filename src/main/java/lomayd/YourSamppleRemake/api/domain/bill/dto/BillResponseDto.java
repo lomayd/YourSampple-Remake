@@ -18,13 +18,17 @@ public class BillResponseDto {
         private String agreementCategory;
         private Integer agreementTime;
 
+        private Integer currentTime;
+
         private Integer phoneSale;
         private Integer billSale;
 
-        private Integer totalInstallment;
-        private Integer monthInstallment;
+        private Integer phoneInstallment; // 할부원금
+        private Integer monthPayment; // 월 할부금
+        private Integer totalPayment; // 총 할부금
+        private Integer monthInstallmentInterest; // 월 할부이자
         private Integer installmentInterest;
 
-        private Integer monthPayment;
+        private Integer monthBill; // 월 요금
     }
 }

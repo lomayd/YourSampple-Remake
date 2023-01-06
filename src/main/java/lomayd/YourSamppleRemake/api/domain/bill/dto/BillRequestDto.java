@@ -16,5 +16,7 @@ public class BillRequestDto {
 
         private String agreementCategory;
         private Integer agreementTime;
+
+        private Integer currentTime;
     }
 }
