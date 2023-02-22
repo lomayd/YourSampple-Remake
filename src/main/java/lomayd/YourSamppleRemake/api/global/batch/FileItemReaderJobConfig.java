@@ -1,6 +1,8 @@
 package lomayd.YourSamppleRemake.api.global.batch;
 
+import lomayd.YourSamppleRemake.api.domain.agreement.Agreement;
 import lomayd.YourSamppleRemake.api.domain.phone.Phone;
+import lomayd.YourSamppleRemake.api.domain.plan.Plan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -17,23 +19,57 @@ public class FileItemReaderJobConfig {
     private final JobBuilderFactory jobBuilderFactory;
     private final StepBuilderFactory stepBuilderFactory;
     private final CsvReader csvReader;
-    private final CsvWriter csvWriter;
+    private final PhoneCsvWriter phoneCsvWriter;
+    private final AgreementCsvWriter agreementCsvWriter;
+    private final PlanCsvWriter planCsvWriter;
 
     private static final int chunkSize = 1000;
 
     @Bean
-    public Job csvFileItemReaderJob() {
-        return jobBuilderFactory.get("csvFileItemReaderJob")
-                .start(csvFileItemReaderStep())
+    public Job phoneCsvFileItemReaderJob() {
+        return jobBuilderFactory.get("phoneCsvFileItemReaderJob")
+                .start(phoneCsvFileItemReaderStep())
                 .build();
     }
 
     @Bean
-    public Step csvFileItemReaderStep() {
-        return stepBuilderFactory.get("csvFileItemReaderStep")
+    public Job agreementCsvFileItemReaderJob() {
+        return jobBuilderFactory.get("agreementCsvFileItemReaderJob")
+                .start(agreementCsvFileItemReaderStep())
+                .build();
+    }
+
+    @Bean
+    public Job planCsvFileItemReaderJob() {
+        return jobBuilderFactory.get("planCsvFileItemReaderJob")
+                .start(planCsvFileItemReaderStep())
+                .build();
+    }
+
+    @Bean
+    public Step phoneCsvFileItemReaderStep() {
+        return stepBuilderFactory.get("phoneCsvFileItemReaderStep")
                 .<Phone, Phone>chunk(chunkSize)
-                .reader(csvReader.csvFileItemReader())
-                .writer(csvWriter)
+                .reader(csvReader.phoneCsvFileItemReader())
+                .writer(phoneCsvWriter)
+                .build();
+    }
+
+    @Bean
+    public Step agreementCsvFileItemReaderStep() {
+        return stepBuilderFactory.get("agreementCsvFileItemReaderStep")
+                .<Agreement, Agreement>chunk(chunkSize)
+                .reader(csvReader.agreementCsvFileItemReader())
+                .writer(agreementCsvWriter)
+                .build();
+    }
+
+    @Bean
+    public Step planCsvFileItemReaderStep() {
+        return stepBuilderFactory.get("planCsvFileItemReaderStep")
+                .<Plan, Plan>chunk(chunkSize)
+                .reader(csvReader.planCsvFileItemReader())
+                .writer(planCsvWriter)
                 .build();
     }
 }
