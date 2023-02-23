@@ -47,7 +47,7 @@ public class CsvReader {
     public FlatFileItemReader<Agreement> agreementCsvFileItemReader() {
         /* file read */
         FlatFileItemReader<Agreement> flatFileItemReader = new FlatFileItemReader<>();
-        flatFileItemReader.setResource(new ClassPathResource("/csv/phone.csv"));
+        flatFileItemReader.setResource(new ClassPathResource("/csv/agreement.csv"));
         flatFileItemReader.setLinesToSkip(1); // header line skip
         flatFileItemReader.setEncoding("UTF-8"); // encoding
 
