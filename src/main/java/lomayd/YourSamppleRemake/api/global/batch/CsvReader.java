@@ -44,34 +44,6 @@ public class CsvReader {
     }
 
     @Bean
-    public FlatFileItemReader<Agreement> agreementCsvFileItemReader() {
-        /* file read */
-        FlatFileItemReader<Agreement> flatFileItemReader = new FlatFileItemReader<>();
-        flatFileItemReader.setResource(new ClassPathResource("/csv/agreement.csv"));
-        flatFileItemReader.setLinesToSkip(1); // header line skip
-        flatFileItemReader.setEncoding("UTF-8"); // encoding
-
-        /* read하는 데이터를 내부적으로 LineMapper을 통해 Mapping */
-        DefaultLineMapper<Agreement> defaultLineMapper = new DefaultLineMapper<>();
-
-        /* delimitedLineTokenizer : setNames를 통해 각각의 데이터의 이름 설정 */
-        DelimitedLineTokenizer delimitedLineTokenizer = new DelimitedLineTokenizer(",");
-        delimitedLineTokenizer.setNames("id", "phone", "plan", "sale");
-        defaultLineMapper.setLineTokenizer(delimitedLineTokenizer);
-
-        /* beanWrapperFieldSetMapper : Tokenizer에서 가지고온 데이터들을 VO로 바인드하는 역할 */
-        BeanWrapperFieldSetMapper<Agreement> beanWrapperFieldSetMapper = new BeanWrapperFieldSetMapper<>();
-        beanWrapperFieldSetMapper.setTargetType(Agreement.class);
-
-        defaultLineMapper.setFieldSetMapper(beanWrapperFieldSetMapper);
-
-        /* lineMapper 지정 */
-        flatFileItemReader.setLineMapper(defaultLineMapper);
-
-        return flatFileItemReader;
-    }
-
-    @Bean
     public FlatFileItemReader<Plan> planCsvFileItemReader() {
         /* file read */
         FlatFileItemReader<Plan> flatFileItemReader = new FlatFileItemReader<>();

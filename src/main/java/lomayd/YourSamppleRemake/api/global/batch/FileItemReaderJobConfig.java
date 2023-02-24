@@ -1,6 +1,5 @@
 package lomayd.YourSamppleRemake.api.global.batch;
 
-import lomayd.YourSamppleRemake.api.domain.agreement.Agreement;
 import lomayd.YourSamppleRemake.api.domain.phone.Phone;
 import lomayd.YourSamppleRemake.api.domain.plan.Plan;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ public class FileItemReaderJobConfig {
     private final StepBuilderFactory stepBuilderFactory;
     private final CsvReader csvReader;
     private final PhoneCsvWriter phoneCsvWriter;
-    private final AgreementCsvWriter agreementCsvWriter;
     private final PlanCsvWriter planCsvWriter;
 
     private static final int chunkSize = 1000;
@@ -29,13 +27,6 @@ public class FileItemReaderJobConfig {
     public Job phoneCsvFileItemReaderJob() {
         return jobBuilderFactory.get("phoneCsvFileItemReaderJob")
                 .start(phoneCsvFileItemReaderStep())
-                .build();
-    }
-
-    @Bean
-    public Job agreementCsvFileItemReaderJob() {
-        return jobBuilderFactory.get("agreementCsvFileItemReaderJob")
-                .start(agreementCsvFileItemReaderStep())
                 .build();
     }
 
@@ -52,15 +43,6 @@ public class FileItemReaderJobConfig {
                 .<Phone, Phone>chunk(chunkSize)
                 .reader(csvReader.phoneCsvFileItemReader())
                 .writer(phoneCsvWriter)
-                .build();
-    }
-
-    @Bean
-    public Step agreementCsvFileItemReaderStep() {
-        return stepBuilderFactory.get("agreementCsvFileItemReaderStep")
-                .<Agreement, Agreement>chunk(chunkSize)
-                .reader(csvReader.agreementCsvFileItemReader())
-                .writer(agreementCsvWriter)
                 .build();
     }
 
