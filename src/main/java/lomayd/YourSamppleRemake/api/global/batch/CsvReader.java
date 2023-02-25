@@ -1,9 +1,10 @@
 package lomayd.YourSamppleRemake.api.global.batch;
 
-import lomayd.YourSamppleRemake.api.domain.agreement.Agreement;
 import lomayd.YourSamppleRemake.api.domain.phone.Phone;
+import lomayd.YourSamppleRemake.api.domain.phone.repository.PhoneRepository;
 import lomayd.YourSamppleRemake.api.domain.plan.Plan;
 import lombok.RequiredArgsConstructor;
+import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
@@ -12,14 +13,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class CsvReader {
+
+    private final PhoneRepository phoneRepository;
     @Bean
     public FlatFileItemReader<Phone> phoneCsvFileItemReader() {
         /* file read */
         FlatFileItemReader<Phone> flatFileItemReader = new FlatFileItemReader<>();
-        flatFileItemReader.setResource(new ClassPathResource("/csv/phone.csv"));
+        flatFileItemReader.setResource(new ClassPathResource("/csv/import/phone.csv"));
         flatFileItemReader.setLinesToSkip(1); // header line skip
         flatFileItemReader.setEncoding("UTF-8"); // encoding
 
@@ -47,7 +52,7 @@ public class CsvReader {
     public FlatFileItemReader<Plan> planCsvFileItemReader() {
         /* file read */
         FlatFileItemReader<Plan> flatFileItemReader = new FlatFileItemReader<>();
-        flatFileItemReader.setResource(new ClassPathResource("/csv/plan.csv"));
+        flatFileItemReader.setResource(new ClassPathResource("/csv/import/plan.csv"));
         flatFileItemReader.setLinesToSkip(1); // header line skip
         flatFileItemReader.setEncoding("UTF-8"); // encoding
 
