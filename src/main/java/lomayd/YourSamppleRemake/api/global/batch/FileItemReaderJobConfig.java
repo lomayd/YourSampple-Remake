@@ -9,6 +9,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,12 +31,12 @@ public class FileItemReaderJobConfig {
 
     private static final int chunkSize = 1000;
 
-    private final PhoneCsvReader2 phoneCsvReader2;
 
     @Bean
     public Job phoneCsvFileItemReaderJob() {
         return jobBuilderFactory.get("phoneCsvFileItemReaderJob")
                 .start(phoneCsvFileItemReaderStep())
+                .incrementer(new RunIdIncrementer())
                 .build();
     }
 
@@ -43,6 +44,7 @@ public class FileItemReaderJobConfig {
     public Job phoneCsvFileItemReaderJob2() throws Exception {
         return jobBuilderFactory.get("phoneCsvFileItemReaderJob2")
                 .start(phoneCsvFileItemReaderStep2())
+                .incrementer(new RunIdIncrementer())
                 .build();
     }
 
@@ -67,7 +69,7 @@ public class FileItemReaderJobConfig {
     public Step phoneCsvFileItemReaderStep2() throws Exception {
         return stepBuilderFactory.get("phoneCsvFileItemReaderStep2")
                 .<Phone, Phone>chunk(chunkSize)
-                .reader((ItemReader<? extends Phone>) phoneCsvReader2.read())
+                .reader(csvReader.jpaPagingItemReader())
                 .writer(phoneCsvWriter2.flatFileItemWriter())
                 .build();
     }

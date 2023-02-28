@@ -27,7 +27,7 @@ public class PhoneCsvWriter2 {
         FlatFileItemWriter<Phone> flatFileItemWriter = new FlatFileItemWriterBuilder<Phone>()
                 .name("itemWriter")
                 .encoding("UTF-8")
-                .resource(new ClassPathResource("/csv/export/phone.csv")) //파일 생성하기 위함
+                .resource(new FileSystemResource("src/main/resources/csv/export/phone.csv")) //파일 생성하기 위함
                 .lineAggregator(lineAggregator)
                 .headerCallback(writer -> writer.write("id,name,prize"))
                 .build();

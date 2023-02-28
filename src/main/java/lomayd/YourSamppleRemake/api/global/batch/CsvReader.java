@@ -5,6 +5,8 @@ import lomayd.YourSamppleRemake.api.domain.phone.repository.PhoneRepository;
 import lomayd.YourSamppleRemake.api.domain.plan.Plan;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.database.JpaPagingItemReader;
+import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
 import org.springframework.batch.item.file.mapping.DefaultLineMapper;
@@ -13,13 +15,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
 public class CsvReader {
 
-    private final PhoneRepository phoneRepository;
+    private final EntityManagerFactory entityManagerFactory;
     @Bean
     public FlatFileItemReader<Phone> phoneCsvFileItemReader() {
         /* file read */
@@ -74,5 +77,14 @@ public class CsvReader {
         flatFileItemReader.setLineMapper(defaultLineMapper);
 
         return flatFileItemReader;
+    }
+
+    @Bean
+    public JpaPagingItemReader<Phone> jpaPagingItemReader() {
+        return new JpaPagingItemReaderBuilder<Phone>()
+                .queryString("SELECT p FROM Phone p")
+                .entityManagerFactory(entityManagerFactory)
+                .name("jpaPagingItemReader")
+                .build();
     }
 }
