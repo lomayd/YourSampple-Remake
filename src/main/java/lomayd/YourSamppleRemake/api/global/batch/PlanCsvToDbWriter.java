@@ -11,7 +11,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-public class PlanCsvWriter implements ItemWriter<Plan> {
+public class PlanCsvToDbWriter implements ItemWriter<Plan> {
 
     private final PlanRepository planRepository;
     @Override

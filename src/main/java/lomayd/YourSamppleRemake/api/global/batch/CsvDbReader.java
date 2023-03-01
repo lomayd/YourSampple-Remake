@@ -1,10 +1,8 @@
 package lomayd.YourSamppleRemake.api.global.batch;
 
 import lomayd.YourSamppleRemake.api.domain.phone.Phone;
-import lomayd.YourSamppleRemake.api.domain.phone.repository.PhoneRepository;
 import lomayd.YourSamppleRemake.api.domain.plan.Plan;
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.batch.item.file.FlatFileItemReader;
@@ -16,15 +14,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 import javax.persistence.EntityManagerFactory;
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-public class CsvReader {
+public class CsvDbReader {
 
     private final EntityManagerFactory entityManagerFactory;
     @Bean
-    public FlatFileItemReader<Phone> phoneCsvFileItemReader() {
+    public FlatFileItemReader<Phone> phoneCsvToDbReader() {
         /* file read */
         FlatFileItemReader<Phone> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setResource(new ClassPathResource("/csv/import/phone.csv"));
@@ -52,7 +49,16 @@ public class CsvReader {
     }
 
     @Bean
-    public FlatFileItemReader<Plan> planCsvFileItemReader() {
+    public JpaPagingItemReader<Phone> phoneDbToCsvReader() {
+        return new JpaPagingItemReaderBuilder<Phone>()
+                .queryString("SELECT p FROM Phone p")
+                .entityManagerFactory(entityManagerFactory)
+                .name("phoneDbToCsvReader")
+                .build();
+    }
+
+    @Bean
+    public FlatFileItemReader<Plan> planCsvToDbReader() {
         /* file read */
         FlatFileItemReader<Plan> flatFileItemReader = new FlatFileItemReader<>();
         flatFileItemReader.setResource(new ClassPathResource("/csv/import/plan.csv"));
@@ -80,11 +86,12 @@ public class CsvReader {
     }
 
     @Bean
-    public JpaPagingItemReader<Phone> jpaPagingItemReader() {
-        return new JpaPagingItemReaderBuilder<Phone>()
-                .queryString("SELECT p FROM Phone p")
+    public JpaPagingItemReader<Plan> planDbToCsvReader() {
+        return new JpaPagingItemReaderBuilder<Plan>()
+                .queryString("SELECT p FROM Plan p")
                 .entityManagerFactory(entityManagerFactory)
-                .name("jpaPagingItemReader")
+                .name("planDbToCsvReader")
                 .build();
     }
+
 }
