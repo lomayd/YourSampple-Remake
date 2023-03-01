@@ -11,7 +11,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-public class PhoneCsvWriter implements ItemWriter<Phone> {
+public class PhoneCsvToDbWriter implements ItemWriter<Phone> {
 
     private final PhoneRepository phoneRepository;
 
