@@ -18,7 +18,11 @@ public class BillService {
         if (bill.getAgreementCategory().equals("PHONESALE")) {
             Integer phoneSale = agreementRepository.findByPhoneId(bill.getPhoneId()).get().getSale();
             Integer phoneInstallment = phoneRepository.findById(bill.getPhoneId()).get().getPrize() - phoneSale;
-            Integer monthPayment = Math.toIntExact(Math.round(phoneInstallment * 0.00492 * Math.pow(1.00492, bill.getAgreementTime()) / Math.pow(1 + 0.00492, bill.getAgreementTime() - 1)));
+            Integer monthPayment = 0;
+            for(int i = 1; i<=bill.getAgreementTime(); i++){
+                monthPayment = monthPayment + Math.toIntExact(Math.round(phoneInstallment * 0.00492 * Math.pow(1.00492, bill.getAgreementTime()) / Math.pow(1 + 0.00492, bill.getAgreementTime() - 1)));
+            }
+            monthPayment = monthPayment / 24;
             Integer totalPayment = Math.round(monthPayment * bill.getAgreementTime());
             Integer monthInstallmentInterest = Math.toIntExact(Math.round((phoneInstallment - (monthPayment * bill.getCurrentTime())) * 0.00492));
             Integer monthBill = bill.getPlanCost() + monthPayment;
@@ -40,7 +44,11 @@ public class BillService {
         }
         else if (bill.getAgreementCategory().equals("BILLSALE")){
             Integer phoneInstallment = phoneRepository.findById(bill.getPhoneId()).get().getPrize();
-            Integer monthPayment = Math.toIntExact(Math.round(phoneInstallment * 0.00492 * Math.pow(1.00492, bill.getAgreementTime()) / Math.pow(1 + 0.00492, bill.getAgreementTime() - 1)));
+            Integer monthPayment = 0;
+            for(int i = 1; i<=bill.getAgreementTime(); i++){
+                monthPayment = monthPayment + Math.toIntExact(Math.round(phoneInstallment * 0.00492 * Math.pow(1.00492, bill.getAgreementTime()) / Math.pow(1 + 0.00492, bill.getAgreementTime() - 1)));
+            }
+            monthPayment = monthPayment / 24;
             Integer totalPayment = Math.round(monthPayment * bill.getAgreementTime());
             Integer monthInstallmentInterest = Math.toIntExact(Math.round((phoneInstallment - (monthPayment * bill.getCurrentTime())) * 0.00492));
             Integer monthBill = Math.round(bill.getPlanCost() / 100 * 75) + monthPayment;
